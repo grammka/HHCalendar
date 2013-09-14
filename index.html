@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/web.css"/>
+<script src="js/jquery.js"></script>
+<script src="js/handlebars.js"></script>
+<script src="js/mustache.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/init.js"></script>
+</head>
+<body>
+
+	<div class="b-overlay" id="b-overlay"></div>
+
+	<div class="b-calendar__header__wrapper">
+		<div class="b-calendar__header">
+			<div class="b-calendar__create-event" id="b-calendar__create-event">Добавить</div>
+			<div class="b-calendar__search">
+				<div class="b-calendar__search__icon__wrapper">
+					<div class="b-calendar__search__icon"></div>
+				</div>
+				<input class="b-calendar__search__field" id="b-calendar__search__field" type="text" placeholder="Событие, дата или участник" value="" />
+			</div>
+			<div class="b-calendar__search-result__wrapper">
+				<div class="b-calendar__search-result" id="b-calendar__search-result">
+					<!-- Search results -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="b-calendar__wrapper">
+		<div class="b-calendar__navig" id="b-calendar__navig">
+			<span class="b-calendar__prev-month" id="b-calendar__prev-month">&nbsp;</span>
+			<span class="b-calendar__choosed-date" id="b-calendar__choosed-date"></span>
+			<span class="b-calendar__next-month" id="b-calendar__next-month">&nbsp;</span>
+			<span class="b-calendar__this-date" id="b-calendar__this-date">Сегодня</span>
+		</div>
+		<div class="b-calendar" id="b-calendar">
+			<!-- Calendar days -->
+		</div>
+	</div>
+
+
+	<!-- Templates -->
+	<script id="template-calendar-cell" type="text/x-handlebars-template">
+		{{#cells}}
+			<div class="b-calendar__item{{#if active}} b-calendar__item_curr-day{{/if}}{{#if event}} b-calendar__item_event{{/if}}{{#if notCurrMonth}} b-calendar__item_not-curr-month{{/if}}" data-date="{{date}}">
+				<div class="b-calendar__item__num">{{#if dayName}}{{dayName}}, {{/if}}{{dayNum}}</div>
+				{{#if event}}
+					<div class="b-calendar__item__title">{{event.title}}</div>
+					<div class="b-calendar__item__members">{{event.members}}</div>
+				{{/if}}
+			</div>
+		{{/cells}}
+	</script>
+
+	<script id="template-calendar-event" type="text/x-handlebars-template">
+		<div class="b-calendar__event">
+			<i class="b-calendar__event__close-btn">&times;</i>
+			<form class="b-calendar__event__form">
+				<input class="b-calendar__event__input" type="text" name="title" value="{{title}}" placeholder="Событие" />
+				<input class="b-calendar__event__input" type="text" name="date" value="{{date}}" placeholder="День, месяц, год" />
+				<input class="b-calendar__event__input" type="text" name="members" value="{{members}}" placeholder="Имена участников" />
+				<textarea class="b-calendar__event__textarea" name="desc" id="" cols="30" rows="10" placeholder="Описание">{{desc}}</textarea>
+			</form>
+			<div class="b-calendar__event__save">Готово</div>
+			<div class="b-calendar__event__delete">Удалить</div>
+		</div>
+	</script>
+
+	<script id="template-search-results" type="text/x-handlebars-template">
+		{{#results}}
+			<div class="b-calendar__search-result__item" data-date="{{dataDate}}">
+				<b class="b-calendar__search-result__title">{{title}}</b>
+				<span class="b-calendar__search-result__date">{{date}}</span>
+			</div>
+		{{/results}}
+	</script>
+	<!-- /Templates -->
+
+</body>
+</html>
