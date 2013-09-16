@@ -3,10 +3,11 @@
 var Calendar = {
 
 	vars: {
-		matchDate:      /^(\d+)[-\/\.\s](\d+|[А-Яа-я]+)[-\/\.\s](\d{4})$/,
-		daysNames:      'понедельник вторник среда четверг пятница суббота воскресение'.split(' '),
-		monthsNames:    'январь февраль март апрель май июнь июль август сентябрь октябрь ноябрь декабрь'.split(' '),
-		monthsNamesGen: 'января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split(' '),
+		matchDate:              /\d+\-\d+\-\d{4}/,
+		matchDateWithMonthName: /^(\d+)[-\/\.\s](\d+|[А-Яа-я]+)[-\/\.\s](\d{4})$/,
+		daysNames:              'понедельник вторник среда четверг пятница суббота воскресение'.split(' '),
+		monthsNames:            'январь февраль март апрель май июнь июль август сентябрь октябрь ноябрь декабрь'.split(' '),
+		monthsNamesGen:         'января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split(' '),
 		monthsNums: {
 			'янв': 0,
 			'фев': 1,
@@ -261,7 +262,7 @@ var Calendar = {
 	events: {
 
 		isValidFormDate: function (date) {
-			var matches = date.match(Calendar.vars.matchDate);
+			var matches = date.match(Calendar.vars.matchDateWithMonthName);
 
 			if (matches == null) return false;
 
@@ -283,16 +284,17 @@ var Calendar = {
 		},
 
 		changeDateFormat: function (date) {
-			var matches = date.match(Calendar.vars.matchDate);
+			var matches = date.match(Calendar.vars.matchDateWithMonthName);
 
 			return matches[1] +'-'+ (Calendar.calendar.getMonthNum(matches[2]) + 1) +'-'+ matches[3];
 		},
 
 		getDataFormatDate: function (date) {
-			return /\d+\-\d+\-\d{4}/.exec(date) ? date : this.changeDateFormat(date);
+			return Calendar.vars.matchDate.exec(date) ? date : this.changeDateFormat(date);
 		},
 
 		showFormError: function () {
+			alert('Неверный формат даты. Пример: 1-1-2013, 1 января 2013');
 			// TODO вывод ошибки формата даты в форме
 		},
 
@@ -581,7 +583,13 @@ var Calendar = {
 
 	getLocalData: function () {
 		for (var i in localStorage) {
-			this.localData[i] = JSON.parse(localStorage[i]);
+			var el = localStorage[i];
+
+			if (Calendar.vars.matchDate.exec(i)) {
+				this.localData[i] = JSON.parse(el);
+			} else {
+				localStorage.removeItem(i);
+			}
 		}
 	},
 
